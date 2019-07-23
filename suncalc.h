@@ -19,8 +19,8 @@
 #include <math.h>
 #include <time.h>
 
-#define SizeOfTimes = 6;
-#define DoubleSizeOfTimes = SizeOfTimes * 2;
+#define SizeOfTimes = 6
+#define DoubleSizeOfTimes = SizeOfTimes * 2
 
 struct SunCoordsData
 {
