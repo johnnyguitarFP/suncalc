@@ -19,22 +19,8 @@
 #include <math.h>
 #include <time.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846264338327950288
-#endif
-
-#define rad M_PI / 180
-#define e_obliquity rad * 23.4397
-
-// date/time constants and conversions
-
-#define dayMS 1000.0 * 60.0 * 60.0 * 24.0
-#define J1970 2440588
-#define J2000 2451545
-#define J0 0.0009
-
-#define SizeOfTimes 6
-#define DoubleSizeOfTimes SizeOfTimes * 2
+#define SizeOfTimes = 6;
+#define DoubleSizeOfTimes = SizeOfTimes * 2;
 
 struct SunCoordsData
 {
@@ -233,6 +219,17 @@ public:
 
 private:
 
+	double PI_;
+	double rad;
+	double e_obliquity;
+	double dayMS;
+
+	double J1970;
+	double J2000;
+	double J0;
+
+public:
+
 	double toJulian(double UnixTime);
 	double fromJulian(double JovianTime);
 	double toDays(double UnixTime);
@@ -261,7 +258,7 @@ public:
 
 private:
 
-	SunCalcTimes times[SizeOfTimes];
+  	SunCalcTimes times[SizeOfTimes];
 
 	//I would prefer to work with static data, so I've opted to not translate this from JS.
 	//void addTime(double Angle, string riseName, string setName);
@@ -301,4 +298,3 @@ public:
 	// calculations for moon rise/set times are based on http://www.stargazing.net/kepler/moonrise.html article
 	//MoonRiseData getMoonTimes(double UnixTime, double lat, double lon, bool bInUTC = false);
 };
-
