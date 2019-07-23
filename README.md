@@ -2,7 +2,7 @@
 SunCalc++
 =========
 
-SunCalc++ is a translation of SunCalc to C++, this was primarily intended for use as a third party library within UE4. I only include <math.h> and <time.h> so it should be fairly portable. No support from me, I don't care what you do with this code as long as you follow the original license, etc. 
+SunCalc++ is a translation of SunCalc to C++, this was primarily intended for use as a third party library within UE4. I only include ```C <math.h> ``` and ```C <time.h>``` so it should be portable. No support from me, I don't care what you do with this code as long as you follow the original license, etc. 
 
 Original readme follows this paragraph. 
 
