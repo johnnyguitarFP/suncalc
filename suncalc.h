@@ -19,9 +19,6 @@
 #include <math.h>
 #include <time.h>
 
-#define SizeOfTimes = 6
-#define DoubleSizeOfTimes = SizeOfTimes * 2
-
 struct SunCoordsData
 {
 public:
@@ -180,25 +177,31 @@ struct SunCalcTimesContainer
 {
 private:
 	
-	int count = 0;
-	int maxcount = (DoubleSizeOfTimes);
+	int count;
+	int maxcount;
 
 public:
 	double SolarNoon;
 	double nadir;
 
-	SunCalcTimeData TimeData[DoubleSizeOfTimes];
+	SunCalcTimeData TimeData[12];
 
 	SunCalcTimesContainer()
 	{
 		SolarNoon = 0;
 		nadir = 0;
+
+		count = 0;
+		maxcount = 12;
 	}
 
 	SunCalcTimesContainer(double inSolarNoon, double innadir)
 	{
 		SolarNoon = inSolarNoon;
 		nadir = innadir;
+
+		count = 0;
+		maxcount = 12;
 	}
 
 	void AddDataToContainer(SunCalcTimeData NewData)
@@ -258,7 +261,7 @@ public:
 
 private:
 
-  	SunCalcTimes times[SizeOfTimes];
+  	SunCalcTimes times[6];
 
 	//I would prefer to work with static data, so I've opted to not translate this from JS.
 	//void addTime(double Angle, string riseName, string setName);
