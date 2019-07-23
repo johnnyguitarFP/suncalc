@@ -10,6 +10,16 @@ suncalc::suncalc()
 	times[3] = SunCalcTimes(-12.0f, SunTOD::nauticalDawn, SunTOD::nauticalDusk);
 	times[4] = SunCalcTimes(-18.0f, SunTOD::nightEnd, SunTOD::night);
 	times[5] = SunCalcTimes(6.0f, SunTOD::goldenHourEnd, SunTOD::goldenHour);
+
+	PI_ = 3.14159265358979323846264338327950288;
+	rad = PI_ / 180;
+	e_obliquity = rad * 23.4397;
+
+	dayMS = 1000.0 * 60.0 * 60.0 * 24.0;
+
+	J1970 = 2440588;
+	J2000 = 2451545;
+	J0 = 0.0009;
 }
 
 suncalc::~suncalc()
@@ -18,17 +28,17 @@ suncalc::~suncalc()
 
 double suncalc::toJulian(double UnixTime)
 {
-	return UnixTime / dayMS - 0.5 + J1970;
+	return (((UnixTime / dayMS) - 0.5) + J1970);
 }
 
 double suncalc::fromJulian(double JovianTime)
 {
-	return (JovianTime + 0.5 - J1970) * dayMS;
+	return (((JovianTime + 0.5) - J1970) * dayMS);
 }
 
 double suncalc::toDays(double UnixTime)
 {
-	return toJulian(UnixTime) - J2000;
+	return (toJulian(UnixTime) - J2000);
 }
 
 double suncalc::rightAcension(double l, double b)
@@ -76,7 +86,7 @@ double suncalc::eclipticLongitude(double M)
 	double C = rad * (1.9148 * sin(M) + 0.02 * sin(2 * M) + 0.0003 * sin(3 * M)); // equation of center
 	double P = rad * 102.9372; // perihelion of the Earth
 
-	return M + C + P + M_PI;
+	return M + C + P + PI_;
 }
 
 SunCoordsData suncalc::sunCoords(double d)
@@ -107,12 +117,12 @@ SunPositionData suncalc::getPosition(double UnixTime, double lat, double lon)
 
 double suncalc::julianCycle(double d, double lw)
 {
-	return round(d - J0 - lw / (2 * M_PI));
+	return round(d - J0 - lw / (2 * PI_));
 }
 
 double suncalc::approxTransit(double Ht, double lw, double n)
 {
-	 return J0 + (Ht + lw) / (2 * M_PI) + n;
+	 return J0 + (Ht + lw) / (2 * PI_) + n;
 }
 
 double suncalc::solarTransitJ(double ds, double M, double L)
@@ -216,7 +226,7 @@ MoonIlluminationData suncalc::getMoonIllumination(double UnixTime)
 
 	return MoonIlluminationData(
 		((1 + cos(inc)) / 2), // fraction
-		(0.5 + 0.5 * inc * (angle < 0 ? -1 : 1) / M_PI), // phase
+		(0.5 + 0.5 * inc * (angle < 0 ? -1 : 1) / PI_), // phase
 		angle // angle
 	);
 }
