@@ -1,7 +1,6 @@
 #include "suncalc.h"
 
 // sun times configuration (angle, morning name, evening name)
-
 suncalc::suncalc()
 {
 	times[0] = SunCalcTimes(-0.833f, SunTOD::sunrise, SunTOD::sunset);
@@ -122,7 +121,7 @@ double suncalc::julianCycle(double d, double lw)
 
 double suncalc::approxTransit(double Ht, double lw, double n)
 {
-	 return J0 + (Ht + lw) / (2 * PI_) + n;
+	return J0 + (Ht + lw) / (2 * PI_) + n;
 }
 
 double suncalc::solarTransitJ(double ds, double M, double L)
@@ -164,23 +163,26 @@ SunCalcTimesContainer suncalc::getTimes(double UnixTime, double Lat, double Lon)
 
 	SunCalcTimesContainer ReturnValue = SunCalcTimesContainer(fromJulian(Jnoon), fromJulian(Jnoon - 0.5));
 
-	for (i = 0; i < SizeOfTimes; i++) 
+	for (i = 0; i < 6; i++)
 	{
 		SunCalcTimes time = times[i];
 
 		Jset = getSetJ(time.GetAngle() * rad, lw, phi, dec, n, M, L);
 		Jrise = Jnoon - (Jset - Jnoon);
 
+		SunCalcTimeData MorningData(fromJulian(Jrise), time.Morning);
+		SunCalcTimeData EveningData(fromJulian(Jset), time.Evening);
+
 		// add two entries per chunk of time data
-		ReturnValue.AddDataToContainer(SunCalcTimeData(fromJulian(Jrise), time.Morning));
-		ReturnValue.AddDataToContainer(SunCalcTimeData(fromJulian(Jset), time.Evening));
+		ReturnValue.AddDataToContainer(MorningData);
+		ReturnValue.AddDataToContainer(EveningData);
 	}
 
 	return ReturnValue;
 }
 
 MoonCoordsData suncalc::moonCoords(double d)
-{ 
+{
 	// geocentric ecliptic coordinates of the moon
 
 	double L = rad * (218.316 + 13.176396 * d); // ecliptic longitude
@@ -203,7 +205,7 @@ MoonPositionData suncalc::getMoonPosition(double UnixTime, double lat, double ln
 	MoonCoordsData c = moonCoords(d);
 	double H = siderealTime(d, lw) - c.RightAscension;
 	double h = altitude(H, phi, c.Declination);
-		// formula 14.1 of "Astronomical Algorithms" 2nd edition by Jean Meeus (Willmann-Bell, Richmond) 1998.
+	// formula 14.1 of "Astronomical Algorithms" 2nd edition by Jean Meeus (Willmann-Bell, Richmond) 1998.
 	double pa = atan2(sin(H), tan(phi) * cos(c.Declination) - sin(c.Declination) * cos(H));
 
 	h = h + astroRefraction(h); // altitude correction for refraction
